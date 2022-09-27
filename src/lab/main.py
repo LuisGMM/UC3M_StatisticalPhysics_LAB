@@ -1,9 +1,9 @@
 
 from __future__ import annotations
 
+import itertools
 import math
 from typing import Union
-import itertools
 
 
 class Num(float):
