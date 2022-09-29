@@ -49,34 +49,18 @@ def print_states2a(N: int) -> None:  # WINNER of vs 1, 2 and 2a
 # print(b/c)
 
 
-def print_states2a(N: int) -> None:  # WINNER of vs 1, 2 and 2a
+def print_states2a_inverted(N: int):
+
+    ai = 0b111
     open('file.txt', 'w').write(
         ''.join(
-            f'{bin(i)[2:].zfill(N)} \t {i.bit_count()} \n {bin(~i)[2:].zfill(N)} \t {i.bit_count()}'
+            f'{bin(i)[2:].zfill(N)} \t {i.bit_count()} \n {bin(i ^ ai)[2:].zfill(N)} \t {(i ^ ai).bit_count()}'
         for i in range(
-            int(math.pow(2, N))
+            int(math.pow(2, N - 1))
             )
         )
     )
 
 
-
-# print(timeit.timeit(lambda: print_states2a(), number=1))
-
-
-# i = 6
-ai = 0b111
-# ii = i ^ ai
-
-# print(f'{bin(i)[2:].zfill(3)} \t {i.bit_count()}')
-# print(f'{bin(ii)[2:].zfill(3)} \t {ii.bit_count()}')
-
-
-def print_states2a_inverted(N: int):
-    for i in range(2 ** (N - 1)):
-
-        ii = i ^ ai
-        print(f'{bin(i)[2:].zfill(3)} \t {i.bit_count()}')
-        print(f'{bin(ii)[2:].zfill(3)} \t {ii.bit_count()}')
-
-print_states_inverted(3)
+# print(timeit.timeit(lambda: print_states2a(21), number=1))
+# print(timeit.timeit(lambda: print_states2a_inverted(21), number=1))
