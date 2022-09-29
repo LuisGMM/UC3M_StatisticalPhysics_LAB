@@ -54,7 +54,6 @@
 # print(len(answers), 2**n)
 
 
-
 def permute(l: list, idx: int, a):
     """_summary_
 
@@ -94,9 +93,7 @@ def combine(l: list, idx: int):
 
 
 
-l = [0, ] * 3
-
-
+l = [0, ] * 6
 for idx in range(len(l)):
     l[idx] = 1
     print(f'{l =}')
