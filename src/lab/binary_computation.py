@@ -5,7 +5,6 @@ import time
 import timeit
 
 
-
 def print_states(N: int) -> None:
 
     string = ''
@@ -30,24 +29,11 @@ def print_states2a(N: int) -> None:  # WINNER of vs 1, 2 and 2a
     open('file.txt', 'w').write(
         ''.join(
             f'{bin(i)[2:].zfill(N)} \t {i.bit_count()} \n'
-        for i in range(
-            int(math.pow(2, N))
+            for i in range(
+                int(math.pow(2, N))
             )
         )
     )
-
-
-# a = timeit.timeit(lambda: print_states(10), number=100)
-# b = timeit.timeit(lambda: print_states2(10), number=100)
-# c = timeit.timeit(lambda: print_states2a(10), number=100)
-
-# print(a)
-# print(b)
-# print(c)
-
-# print(a/b)
-# print(b/c)
-
 
 def print_states2a_inverted(N: int):
 
@@ -55,12 +41,66 @@ def print_states2a_inverted(N: int):
     open('file.txt', 'w').write(
         ''.join(
             f'{bin(i)[2:].zfill(N)} \t {i.bit_count()} \n {bin(i ^ ai)[2:].zfill(N)} \t {(i ^ ai).bit_count()}'
-        for i in range(
-            int(math.pow(2, N - 1))
+            for i in range(
+                int(math.pow(2, N - 1))
             )
         )
     )
 
+# print(timeit.timeit(lambda: print_states2a(10), number=100))
+# print(timeit.timeit(lambda: print_states2a_inverted(10), number=100))
 
-# print(timeit.timeit(lambda: print_states2a(21), number=1))
-# print(timeit.timeit(lambda: print_states2a_inverted(21), number=1))
+
+
+def print_states2a_from_to(N: int, from_: int, to: int) -> None:
+
+    return ''.join(
+        f'{bin(i)[2:].zfill(N)} \t {i.bit_count()} \n'
+        for i in range(from_, to)
+        )
+
+def print_states2a_return(N: int):
+    return ''.join(
+            f'{bin(i)[2:].zfill(N)} \t {i.bit_count()} \n'
+            for i in range(
+                int(math.pow(2, N))
+            )
+        )
+
+
+
+N = 20
+M = 1
+
+states_core = pow(2, N - M)
+states = pow(2, N)
+
+# print(states_core)
+# print(states)
+
+# for from_, to in zip(range(0, states + 1, states_core), range(states_core, states + 1, states_core)):
+#     print_states2a_from_to(N, from_, to)
+
+
+from joblib import Parallel, delayed
+
+# print(Parallel(n_jobs=pow(2, M))(
+#     delayed(print_states2a_from_to)(N, from_, to)
+#     for from_, to in zip(
+#         range(0, states + 1, states_core),
+#         range(states_core, states + 1, states_core)
+#         )
+#     )
+# )
+
+
+print(timeit.timeit(lambda: Parallel(n_jobs=pow(2, M))(
+    delayed(print_states2a_from_to)(N, from_, to)
+    for from_, to in zip(
+        range(0, states + 1, states_core),
+        range(states_core, states + 1, states_core)
+        )
+    ),
+    number=2))
+
+print(timeit.timeit(lambda: print_states2a_return(N), number=2))
