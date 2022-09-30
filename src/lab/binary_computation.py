@@ -68,8 +68,8 @@ def print_states2a_return(N: int):
 
 
 
-N = 21
-M = 3
+N = 30
+M = 4
 
 states_core = pow(2, N - M)
 states = pow(2, N)
@@ -100,6 +100,6 @@ print(timeit.timeit(lambda: Parallel(n_jobs=pow(2, M))(
         range(states_core, states + 1, states_core)
         )
     ),
-    number=2))
+    number=1))
 
-print(timeit.timeit(lambda: print_states2a(N), number=2))
+# print(timeit.timeit(lambda: print_states2a(N), number=1))
