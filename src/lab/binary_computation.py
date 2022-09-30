@@ -51,13 +51,12 @@ def print_states2a_inverted(N: int):
 # print(timeit.timeit(lambda: print_states2a_inverted(10), number=100))
 
 
-
 def print_states2a_from_to(N: int, from_: int, to: int) -> None:
-
-    return ''.join(
+    return  ''.join(
         f'{bin(i)[2:].zfill(N)} \t {i.bit_count()} \n'
         for i in range(from_, to)
         )
+
 
 def print_states2a_return(N: int):
     return ''.join(
@@ -69,8 +68,8 @@ def print_states2a_return(N: int):
 
 
 
-N = 20
-M = 1
+N = 21
+M = 3
 
 states_core = pow(2, N - M)
 states = pow(2, N)
@@ -84,14 +83,14 @@ states = pow(2, N)
 
 from joblib import Parallel, delayed
 
-# print(Parallel(n_jobs=pow(2, M))(
-#     delayed(print_states2a_from_to)(N, from_, to)
-#     for from_, to in zip(
-#         range(0, states + 1, states_core),
-#         range(states_core, states + 1, states_core)
-#         )
-#     )
-# )
+
+def print_states2a_from_to(N: int, from_: int, to: int) -> None:
+    open(f'file_from_{from_}_to_{to}', 'w').write(''.join(
+        f'{bin(i)[2:].zfill(N)} \t {i.bit_count()} \n'
+        for i in range(from_, to)
+        )
+    )
+
 
 
 print(timeit.timeit(lambda: Parallel(n_jobs=pow(2, M))(
@@ -103,4 +102,4 @@ print(timeit.timeit(lambda: Parallel(n_jobs=pow(2, M))(
     ),
     number=2))
 
-print(timeit.timeit(lambda: print_states2a_return(N), number=2))
+print(timeit.timeit(lambda: print_states2a(N), number=2))
