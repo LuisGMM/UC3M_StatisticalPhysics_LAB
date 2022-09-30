@@ -68,8 +68,8 @@ def print_states2a_return(N: int):
 
 
 
-N = 30
-M = 4
+N = 20
+M = 3
 
 states_core = pow(2, N - M)
 states = pow(2, N)
@@ -84,7 +84,7 @@ states = pow(2, N)
 from joblib import Parallel, delayed
 
 
-def print_states2a_from_to(N: int, from_: int, to: int) -> None:
+def print_states2a_from_to_write(N: int, from_: int, to: int) -> None:
     open(f'file_from_{from_}_to_{to}', 'w').write(''.join(
         f'{bin(i)[2:].zfill(N)} \t {i.bit_count()} \n'
         for i in range(from_, to)
@@ -92,9 +92,28 @@ def print_states2a_from_to(N: int, from_: int, to: int) -> None:
     )
 
 
+def parallel_job():
+
+    return Parallel(n_jobs=pow(2, M))(
+            delayed(print_states2a_from_to)(N, from_, to)
+            for from_, to in zip(
+                range(0, states + 1, states_core),
+                range(states_core, states + 1, states_core)
+                )
+        )
+
 
 print(timeit.timeit(lambda: Parallel(n_jobs=pow(2, M))(
-    delayed(print_states2a_from_to)(N, from_, to)
+    delayed(print_states2a_from_to_write)(N, from_, to)
+    for from_, to in zip(
+        range(0, states + 1, states_core),
+        range(states_core, states + 1, states_core)
+        )
+    ),
+    number=1))
+
+print(timeit.timeit(lambda: Parallel(n_jobs=pow(2, M), prefer='threads')(
+    delayed(print_states2a_from_to_write)(N, from_, to)
     for from_, to in zip(
         range(0, states + 1, states_core),
         range(states_core, states + 1, states_core)
@@ -103,3 +122,5 @@ print(timeit.timeit(lambda: Parallel(n_jobs=pow(2, M))(
     number=1))
 
 # print(timeit.timeit(lambda: print_states2a(N), number=1))
+
+# print(timeit.timeit(lambda: parallel_job(), number=1))
