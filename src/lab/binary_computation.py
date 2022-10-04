@@ -65,3 +65,16 @@ def parallel_job():
 # print(timeit.timeit(lambda: print_states2a(N), number=1))
 
 # print(timeit.timeit(lambda: parallel_job(), number=1))
+
+
+def print_states2a_inverted(N: int):
+
+    ai = 0b111
+    (
+        ''.join(
+            f'{bin(i)[2:].zfill(N)} \t {i.bit_count()} \n {bin(i ^ ai)[2:].zfill(N)} \t {(i ^ ai).bit_count()}'
+            for i in range(
+                int(math.pow(2, N - 1))
+            )
+        )
+    )
